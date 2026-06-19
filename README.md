@@ -47,20 +47,20 @@ $$
 evaluated via a 40-point grid search per sensor per time step, with negligible computational overhead.
 
 ### 3. Discrete-Time CBF Safety Filter on $\theta$
- 
+
 To guarantee that adaptation never degrades coverage below an operational floor, the proposed $\theta_i^*(t)$ is passed through a CBF projection enforcing forward invariance of the safe set $\mathcal{S} = \{\theta : h(\theta) \ge 0\}$:
- 
+
 $$
 h(\theta) = \nu(a,\theta;t) - \nu_{\min}, \qquad
 h(\theta_{\text{new}}) \ge (1-\gamma) h(\theta_{\text{old}})
 $$
- 
+
 If the unconstrained proposal violates this inequality, $\theta$ is projected by bisection between $\theta_{\text{old}}$ and $\theta^*$ (at most 10 steps) toward the closest safe value:
- 
+
 $$
 \theta_i^{\text{safe}} = \arg\min_{\theta \in [\theta_{\text{old}}, \theta^*]} \lvert \theta - \theta^* \rvert \quad \text{s.t.} \quad h(a,\theta) \ge (1-\gamma) h(a,\theta_{\text{old}})
 $$
- 
+
 with $\nu_{\min} = 0.25$ and class-$\mathcal{K}$ parameter $\gamma = 0.6$ in the reported experiments. This is the core safety contribution absent from the original offline framework.
 
 ### 4. Connection to Theorem 1 (Paper [2])
