@@ -22,7 +22,7 @@ Each sensor $i$ maintains an independent scalar EKF over its local environmental
 **Prediction**
 
 $$
-\hat{x}_{i,k\mid k-1} = F\,\hat{x}_{i,k-1\mid k-1}, \qquad
+\hat{x}_{i,k\mid k-1} = F\hat{x}_{i,k-1\mid k-1}, \qquad
 P_{i,k\mid k-1} = F^2 P_{i,k-1\mid k-1} + Q
 $$
 
@@ -31,7 +31,7 @@ $$
 $$
 K_{i,k} = \frac{P_{i,k\mid k-1}}{P_{i,k\mid k-1} + R}, \qquad
 \hat{x}_{i,k\mid k} = \hat{x}_{i,k\mid k-1} + K_{i,k}\left(y_{i,k} - \hat{x}_{i,k\mid k-1}\right), \qquad
-P_{i,k\mid k} = (1 - K_{i,k})\,P_{i,k\mid k-1}
+P_{i,k\mid k} = (1 - K_{i,k}) P_{i,k\mid k-1}
 $$
 
 with $F = 0.97$, $Q = 4\times10^{-3}$, $R = 2\times10^{-2}$ in the simulated configuration. The per-sensor design preserves spatial structure in $\omega(s,t)$ that a single shared filter would average away.
@@ -41,7 +41,7 @@ with $F = 0.97$, $Q = 4\times10^{-3}$, $R = 2\times10^{-2}$ in the simulated con
 At each time step, the EKF estimate $\hat\omega_i(t)$ is used to re-solve the filter-gain selection that Paper [2] otherwise performs once, offline:
 
 $$
-\theta_i^*(t) = \arg\max_{\theta \in [0.4,\,2.5]} \int_\Psi \lambda(s,t)\,\alpha\big(\chi(\theta, \hat\omega_i(t))\big)\,p\big(s, a_i, \theta, \hat\omega_i(t)\big)\,ds
+\theta_i^*(t) = \arg\max_{\theta \in [0.4, 2.5]} \int_\Psi \lambda(s,t)\alpha\big(\chi(\theta, \hat\omega_i(t))\big) p\big(s, a_i, \theta, \hat\omega_i(t)\big) ds
 $$
 
 evaluated via a 40-point grid search per sensor per time step, with negligible computational overhead.
@@ -52,23 +52,23 @@ To guarantee that adaptation never degrades coverage below an operational floor,
 
 $$
 h(\theta) = \nu(a,\theta;t) - \nu_{\min}, \qquad
-h(\theta_{\text{new}}) \ge (1-\gamma)\,h(\theta_{\text{old}})
+h(\theta_{\text{new}}) \ge (1-\gamma) h(\theta_{\text{old}})
 $$
 
 If the unconstrained proposal violates this inequality, $\theta$ is projected by bisection between $\theta_{\text{old}}$ and $\theta^*$ (at most 10 steps) toward the closest safe value:
 
 $$
-\theta_i^{\text{safe}} = \arg\min_{\theta \in [\theta_{\text{old}},\,\theta^*]} \lvert \theta - \theta^* \rvert \quad \text{s.t.} \quad h(a,\theta) \ge (1-\gamma)\,h(a,\theta_{\text{old}})
+\theta_i^{\text{safe}} = \arg\min_{\theta \in [\theta_{\text{old}}, \theta^*]} \lvert \theta - \theta^* \rvert \quad \text{s.t.} \quad h(a,\theta) \ge (1-\gamma) h(a,\theta_{\text{old}})
 $$
 
 with $\nu_{\min} = 0.25$ and class-$\mathcal{K}$ parameter $\gamma = 0.6$ in the reported experiments. This is the core safety contribution absent from the original offline framework.
 
 ### 4. Connection to Theorem 1 (Paper [2])
 
-The sufficient condition for beneficial filtering, $\dfrac{\partial_\theta p}{p} \ge -\dfrac{\alpha'(\chi)}{\alpha(\chi)}\,\partial_\theta\chi$, specializes under the Gaussian sensing model to:
+The sufficient condition for beneficial filtering, $\dfrac{\partial_\theta p}{p} \ge -\dfrac{\alpha'(\chi)}{\alpha(\chi)} \partial_\theta\chi$, specializes under the Gaussian sensing model to:
 
 $$
-\frac{2(s-a)^2\,e^{\beta_\omega \omega}}{\theta^3} \;\ge\; \beta\left(\frac{\chi}{1+\beta\chi}\right) 2(\theta-1)\omega
+\frac{2(s-a)^2 e^{\beta_\omega \omega}}{\theta^3} \;\ge\; \beta\left(\frac{\chi}{1+\beta\chi}\right) 2(\theta-1)\omega
 $$
 
 With accurate online $\hat\omega_i(t)$, the EKF lets the controller stay on the favorable side of this inequality at every time step — something a static $\theta$ can only satisfy on time-average, never instantaneously, in a drifting environment.
