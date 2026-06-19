@@ -51,8 +51,7 @@ evaluated via a 40-point grid search per sensor per time step, with negligible c
 To guarantee that adaptation never degrades coverage below an operational floor, the proposed $\theta_i^*(t)$ is passed through a CBF projection enforcing forward invariance of the safe set $\mathcal{S} = \{\theta : h(\theta) \ge 0\}$:
 
 $$
-h(\theta) = \nu(a,\theta;t) - \nu_{\min}, \qquad
-h(\theta_{\text{new}}) \ge (1-\gamma) h(\theta_{\text{old}})
+h(\theta) = \nu(a,\theta;t) - \nu_{\min}, \qquad h(\theta_{\text{new}}) \ge (1-\gamma) h(\theta_{\text{old}})
 $$
 
 If the unconstrained proposal violates this inequality, $\theta$ is projected by bisection between $\theta_{\text{old}}$ and $\theta^*$ (at most 10 steps) toward the closest safe value:
