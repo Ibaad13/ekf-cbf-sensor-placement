@@ -108,15 +108,14 @@ ekf-cbf-sensor-placement/
 │   ├── fig1_environment.png           # True omega(s,t) + per-sensor EKF tracking
 │   ├── fig2_theta_adapt.png           # Adaptive theta_i(t) + CBF activation map
 │   ├── fig3_void_prob.png             # Instantaneous void probability, 3 methods
-│   ├── fig4_placement.png             # Sensor positions over target intensity lambda(s,t)
-│   └── fig5_summary.png               # Aggregate bar charts: mean/min nu, violation rate
+│   └── fig4_placement.png             # Sensor positions over target intensity lambda(s,t)
 │
 ├── reports/
 │   └── Ibaad_Report_2.pdf             # Full research task report (this project's writeup)
 │
 ├── papers/
-│   ├── paper1_syscon2025.md           # Kim et al., IEEE SysCon 2025 (reference)
-│   └── paper2_arxiv_2510.05343.md     # Kim et al., arXiv:2510.05343 (reference)
+│   ├── Near-Optimal_Sensor_Placement_for_Detecting_Stochastic_Target_Trajectories_in_Barrier_Coverage_Systems.pdf   # Paper [1], SysCon 2025
+│   └── 2510.05343v3.pdf               # Paper [2], arXiv preprint
 │
 ├── notebooks/                         # (optional) exploratory analysis / sensitivity sweeps
 │
@@ -168,7 +167,7 @@ This will:
 1. Build the synthetic LGCP target intensity $\lambda(s,t)$ and drifting environmental field $\omega(s,t)$.
 2. Run **Random + fixed $\theta$**, **Greedy + fixed $\theta$** (Paper [2] baseline), and **Greedy + EKF-CBF $\theta$** (proposed) over the 24-hour horizon.
 3. Print a results summary (sensor positions, final $\theta$ values, mean/min void probability, CBF activation rate) to the terminal.
-4. Save five figures (`fig1`–`fig5_*.png`) to the working directory.
+4. Save figures (`fig1_environment.png` through `fig4_placement.png`, plus `fig5_summary.png`) to the working directory. This repo's `figures/` folder currently includes `fig1`–`fig4`; `fig5_summary.png` is reproduced automatically if you run the script yourself.
 
 To redirect figure output into the `figures/` folder:
 
@@ -196,7 +195,6 @@ CBF activations: 14 sensor-steps out of 192 (7.3%)
 | **`fig2_theta_adapt.png`** | *(Left)* Adaptive filter gain $\theta_i(t)$ per sensor vs. the static $\theta = 1.2$ baseline — outer sensors in cleaner water push $\theta$ toward 2.5; center sensors in degraded conditions hold $\theta$ near 1.1–1.3. *(Right)* Time bins where the CBF projection was triggered, concentrated at the peak-degradation window. |
 | **`fig3_void_prob.png`** | Instantaneous void probability $\nu(t)$ across the 24-hour horizon for all three methods, with the CBF safety threshold $\nu_{\min} = 0.25$ marked. Shows the proposed method tracking the greedy baseline and pulling ahead once the environment drifts away from the static $\theta$'s calibration point. |
 | **`fig4_placement.png`** | Target intensity $\lambda(s,t)$ heatmap with sensor positions for all three methods overlaid, illustrating how Random placement misses a high-traffic lane that Greedy/Proposed correctly cover. |
-| **`fig5_summary.png`** | Aggregate bar comparison of mean void probability, worst-case void probability, and fraction of time below $\nu_{\min}$ across the three methods — the headline quantitative result of the study. |
 
 ---
 
@@ -249,6 +247,10 @@ If referencing this work or its baselines, please cite:
 ```
 
 This extension's report (`reports/Ibaad_Report_2.pdf`) documents the full derivation, simulation parameters, and discussion of limitations — including open items such as a predictive/robust CBF using EKF covariance and joint position-$\theta$ adaptation, both proposed as immediate next steps.
+
+The original PDFs for both reference papers are included in this repository for convenience:
+- [`papers/Near-Optimal_Sensor_Placement_for_Detecting_Stochastic_Target_Trajectories_in_Barrier_Coverage_Systems.pdf`](./papers/Near-Optimal_Sensor_Placement_for_Detecting_Stochastic_Target_Trajectories_in_Barrier_Coverage_Systems.pdf) — Paper [1]
+- [`papers/2510.05343v3.pdf`](./papers/2510.05343v3.pdf) — Paper [2]
 
 ---
 
